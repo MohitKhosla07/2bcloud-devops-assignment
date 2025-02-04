@@ -1,0 +1,95 @@
+name: Terraform CI/CD
+
+on:
+  push:
+    branches:
+      - none
+  pull_request:
+    branches:
+      - none
+  workflow_dispatch:
+
+env:
+  TF_ROOT: environments/${{ secrets.SECTOR }}/${{ secrets.ENV }}
+  TF_ENVIRONMENT_CONFIG_FILE_NAME: ${{ env.TF_ROOT }}/environment.config
+  ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+  ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+  ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+  ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+  TF_STATE_NAME: default
+  TF_CACHE_KEY: default
+
+jobs:
+  init:
+    name: Terraform Init
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: latest
+
+      - name: Terraform Init
+        run: terraform init
+        working-directory: ${{ env.TF_ROOT }}
+
+  validate:
+    name: Terraform Validate
+    runs-on: ubuntu-latest
+    needs: init
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Validate
+        run: terraform validate
+        working-directory: ${{ env.TF_ROOT }}
+
+  plan:
+    name: Terraform Plan
+    runs-on: ubuntu-latest
+    needs: validate
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Plan
+        run: terraform plan -var-file=environment.config -out=main.plan -lock=false
+        working-directory: ${{ env.TF_ROOT }}
+
+      - name: Upload Terraform Plan
+        uses: actions/upload-artifact@v4
+        with:
+          name: terraform-plan
+          path: ${{ env.TF_ROOT }}/main.plan
+
+  apply:
+    name: Terraform Apply
+    runs-on: ubuntu-latest
+    needs: plan
+    environment: production
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Download Terraform Plan
+        uses: actions/download-artifact@v4
+        with:
+          name: terraform-plan
+          path: ${{ env.TF_ROOT }}
+
+      - name: Terraform Apply
+        run: terraform apply main.plan -lock=false
+        working-directory: ${{ env.TF_ROOT }}
