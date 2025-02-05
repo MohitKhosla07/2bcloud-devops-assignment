@@ -1,3 +1,6 @@
+data "azurerm_client_config" "example" {}
+
+
 terraform {
   required_version = ">=1.3"
   required_providers {
@@ -27,10 +30,10 @@ provider "azurerm" {
       prevent_deletion_if_contains_resources = false
     }
   }
-  client_id       = var.client_id
-  client_secret   = var.client_secret
-  tenant_id       = var.tenant_id
-  subscription_id = var.subscription_id
+  client_id       = data.azurerm_client_config.example.client_id
+  client_secret   = data.azurerm_client_config.example.client_secret
+  tenant_id       = data.azurerm_client_config.example.tenant_id
+  subscription_id = data.azurerm_client_config.example.subscription_id
 }
 
 provider "curl" {}
