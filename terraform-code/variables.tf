@@ -37,3 +37,9 @@ variable "bring_your_own_vnet" {
   type    = bool
   default = true
 }
+
+
+variable "client_id" {}
+variable "client_secret" {}
+variable "tenant_id" {}
+variable "subscription_id" {}
