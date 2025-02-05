@@ -27,7 +27,7 @@ app.get('/', (req, res) => {
 });
 
 // Health check endpoint
-app.get('/healthz', (req, res) => {
+app.get('/healthz', (req, res) => {      #Health Check for an application endpoint /healthz
   res.status(200).send('Healthy');
 });
 
@@ -178,6 +178,7 @@ helm upgrade --install app <helm-path> --namespace <namespace> --create-namespac
 
 
 
-
+# TESTING THE APPLICATION RUN:
+ http://myapp-k8s-node.eastus2.cloudapp.azure.com/
 
 
