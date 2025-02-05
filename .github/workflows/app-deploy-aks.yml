@@ -32,7 +32,6 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      
       # Login to Azure Container Registry
       - name: Azure Container Registry Login
         uses: azure/docker-login@v2
@@ -76,9 +75,5 @@ jobs:
       # Deploy to AKS using Helm
       - name: Deploy to AKS
         run: |
-	    az aks get-credentials --admin --resource-group ${{ secrets.AKS_RESOURCE_GROUP }} --name ${{ secrets.AKS_CLUSTER_NAME }}
-            helm upgrade --install app ${{ env.HELM_CHART_PATH }} \
-            --namespace ${{ env.KUBERNETES_NAMESPACE }} \
-            --create-namespace \
-            --wait \
-            --timeout 5m
+          az aks get-credentials --admin --resource-group ${{ secrets.AKS_RESOURCE_GROUP }} --name ${{ secrets.AKS_CLUSTER_NAME }}
+          helm upgrade --install app ${{ env.HELM_CHART_PATH }} --namespace ${{ env.KUBERNETES_NAMESPACE }} --create-namespace --wait --timeout 5m
