@@ -39,7 +39,3 @@ variable "bring_your_own_vnet" {
 }
 
 
-variable "client_id" {}
-variable "client_secret" {}
-variable "tenant_id" {}
-variable "subscription_id" {}
