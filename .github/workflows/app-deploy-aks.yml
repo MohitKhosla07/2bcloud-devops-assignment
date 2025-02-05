@@ -76,7 +76,7 @@ jobs:
       # Deploy to AKS using Helm
       - name: Deploy to AKS
         run: |
-		        az aks get-credentials --admin --resource-group ${{ secrets.AKS_RESOURCE_GROUP }} --name ${{ secrets.AKS_CLUSTER_NAME }}
+	    az aks get-credentials --admin --resource-group ${{ secrets.AKS_RESOURCE_GROUP }} --name ${{ secrets.AKS_CLUSTER_NAME }}
             helm upgrade --install app ${{ env.HELM_CHART_PATH }} \
             --namespace ${{ env.KUBERNETES_NAMESPACE }} \
             --create-namespace \
