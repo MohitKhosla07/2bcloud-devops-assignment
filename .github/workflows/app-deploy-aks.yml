@@ -1,52 +1,87 @@
 name: Build and Deploy to AKS
+
 on:
   push:
     branches:
       - main
+
 env:
   AZURE_CONTAINER_REGISTRY: "mohitacrtest"
   IMAGE_NAME: "myapp"
   HELM_CHART_PATH: "./helm"
   KUBERNETES_NAMESPACE: "test"
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     permissions:
       id-token: write
       contents: read
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - uses: azure/login@v2
+
+      # Azure Login
+      - name: Azure Login
+        uses: azure/login@v2
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      # Set up Docker Buildx
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-      - uses: azure/docker-login@v2
+
+      # Login to Azure Container Registry
+      - name: Azure Container Registry Login
+        uses: azure/docker-login@v2
         with:
           login-server: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io
           username: ${{ secrets.ACR_USERNAME }}
           password: ${{ secrets.ACR_PASSWORD }}
+
+      # Build and push the Docker image
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
           tags: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ github.sha }}
+
+      # Get AKS credentials
       - name: Get AKS credentials
         uses: azure/aks-set-context@v3
         with:
           resource-group: ${{ secrets.AKS_RESOURCE_GROUP }}
           cluster-name: ${{ secrets.AKS_CLUSTER_NAME }}
+
+      # Install kubelogin for AAD authentication
+      - name: Install kubelogin
+        run: |
+          az aks install-cli
+          curl -LO https://github.com/Azure/kubelogin/releases/latest/download/kubelogin-linux-amd64.zip
+          unzip kubelogin-linux-amd64.zip
+          sudo mv kubelogin /usr/local/bin/
+
+      # Convert kubeconfig to use kubelogin
+      - name: Convert kubeconfig to use kubelogin
+        run: |
+          kubelogin convert-kubeconfig -l azurecli
+
+      # Install Helm
       - name: Setup Helm
         uses: azure/setup-helm@v3
         with:
           version: 'latest'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Update Helm values with new image tag
       - name: Update Helm values with new image tag
         run: |
           yq eval ".image.repository = \"${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.IMAGE_NAME }}\" | .image.tag = \"${{ github.sha }}\"" -i ${{ env.HELM_CHART_PATH }}/values.yaml
+
+      # Deploy to AKS using Helm
       - name: Deploy to AKS
         run: |
           helm upgrade --install app ${{ env.HELM_CHART_PATH }} \
