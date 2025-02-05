@@ -58,14 +58,15 @@ jobs:
       # Install kubelogin for AAD authentication
       - name: Install kubelogin
         run: |
-          # Download the kubelogin binary directly without zipping
-          curl -sL https://github.com/Azure/kubelogin/releases/latest/download/kubelogin-linux-amd64 -o kubelogin
-  
-          # Make kubelogin executable
-          chmod +x kubelogin
-  
-          # Move it to a location in your $PATH (e.g., /usr/local/bin)
+          curl -LO https://github.com/Azure/kubelogin/releases/download/v0.0.20/kubelogin-linux-amd64.zip
+          unzip kubelogin-linux-amd64.zip
           sudo mv kubelogin /usr/local/bin/
+          rm kubelogin-linux-amd64.zip
+
+      # Convert kubeconfig to use kubelogin
+      - name: Convert kubeconfig to use kubelogin
+        run: |
+          kubelogin convert-kubeconfig -l azurecli
 
 
       # Convert kubeconfig to use kubelogin
