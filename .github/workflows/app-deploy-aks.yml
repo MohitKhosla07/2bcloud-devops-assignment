@@ -32,6 +32,7 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
+      
       # Login to Azure Container Registry
       - name: Azure Container Registry Login
         uses: azure/docker-login@v2
@@ -56,23 +57,8 @@ jobs:
           cluster-name: ${{ secrets.AKS_CLUSTER_NAME }}
 
       # Install kubelogin for AAD authentication
-      - name: Install kubelogin
-        run: |
-          curl -LO https://github.com/Azure/kubelogin/releases/download/v0.0.20/kubelogin-linux-amd64.zip
-          unzip kubelogin-linux-amd64.zip
-          sudo mv kubelogin /usr/local/bin/
-          rm kubelogin-linux-amd64.zip
-
-      # Convert kubeconfig to use kubelogin
-      - name: Convert kubeconfig to use kubelogin
-        run: |
-          kubelogin convert-kubeconfig -l azurecli
-
-
-      # Convert kubeconfig to use kubelogin
-      - name: Convert kubeconfig to use kubelogin
-        run: |
-          kubelogin convert-kubeconfig -l azurecli
+      - name: Install kubectl and kubelogin
+        run: az aks install-cli
 
       # Install Helm
       - name: Setup Helm
@@ -90,6 +76,7 @@ jobs:
       # Deploy to AKS using Helm
       - name: Deploy to AKS
         run: |
+          az aks get-credentials --resource-group ${{ secrets.AKS_RESOURCE_GROUP }} --name ${{ secrets.AKS_CLUSTER_NAME }} --overwrite-existing
           helm upgrade --install app ${{ env.HELM_CHART_PATH }} \
             --namespace ${{ env.KUBERNETES_NAMESPACE }} \
             --create-namespace \
