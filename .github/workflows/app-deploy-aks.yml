@@ -56,23 +56,8 @@ jobs:
           cluster-name: ${{ secrets.AKS_CLUSTER_NAME }}
 
       # Install kubelogin for AAD authentication
-      - name: Install kubelogin
-        run: |
-          curl -LO https://github.com/Azure/kubelogin/releases/download/v0.0.20/kubelogin-linux-amd64.zip
-          unzip kubelogin-linux-amd64.zip
-          sudo mv kubelogin /usr/local/bin/
-          rm kubelogin-linux-amd64.zip
-
-      # Convert kubeconfig to use kubelogin
-      - name: Convert kubeconfig to use kubelogin
-        run: |
-          kubelogin convert-kubeconfig -l azurecli
-
-
-      # Convert kubeconfig to use kubelogin
-      - name: Convert kubeconfig to use kubelogin
-        run: |
-          kubelogin convert-kubeconfig -l azurecli
+      - name: Install kubectl and kubelogin
+        run: az aks install-cli
 
       # Install Helm
       - name: Setup Helm
