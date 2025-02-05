@@ -158,4 +158,3 @@ Source: hashicorp/random
 Version: 3.3.2
 
 
-# Application Deployment steps through Helm Charts using Github Actions
