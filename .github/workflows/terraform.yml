@@ -31,16 +31,18 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+      - name: Ensure Azure CLI is Logged In
+        run: |
+          az account set --subscription $(az account list --query "[?isDefault].id" -o tsv)
+
       - name: Terraform Init
         working-directory: ${{ env.WORKING_DIR }}
         run: |
-          az login --use-device-code
           terraform init
 
       - name: Terraform Format
         working-directory: ${{ env.WORKING_DIR }}
         run: |
-          az login --use-device-code
           terraform fmt
 
       - name: Terraform Validate
