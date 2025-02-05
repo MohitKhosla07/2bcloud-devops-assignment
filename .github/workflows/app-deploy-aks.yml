@@ -42,6 +42,8 @@ jobs:
         uses: azure/setup-helm@v3
         with:
           version: 'latest'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Update Helm values with new image tag
         run: |
           yq eval ".image.repository = \"${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.IMAGE_NAME }}\" | .image.tag = \"${{ github.sha }}\"" -i ${{ env.HELM_CHART_PATH }}/values.yaml
