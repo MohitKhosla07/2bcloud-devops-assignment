@@ -38,12 +38,8 @@ jobs:
       - name: Terraform Init
         working-directory: ${{ env.WORKING_DIR }}
         run: |
+          az login --use-device-code
           terraform init
-
-      - name: Terraform Format
-        working-directory: ${{ env.WORKING_DIR }}
-        run: |
-          terraform fmt
 
       - name: Terraform Validate
         working-directory: ${{ env.WORKING_DIR }}
