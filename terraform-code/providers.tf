@@ -1,6 +1,3 @@
-data "azurerm_client_config" "example" {}
-
-
 terraform {
   required_version = ">=1.3"
   required_providers {
