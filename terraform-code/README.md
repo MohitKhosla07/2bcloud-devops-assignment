@@ -111,6 +111,52 @@ Log Analytics Workspace: prefix-workspace
 Container Registry: mohitacrtest
 Maintenance Window: Sundays, 22:00–23:00
 
+9. Azure Application Gateway (App Gateway) Configuration
+
+Here’s the detailed breakdown for Azure Application Gateway (App Gateway), similar to your provided AKS configuration example:
+
+Azure Application Gateway (App Gateway) Configuration
+1. Application Gateway Basics An Azure Application Gateway is a web traffic load balancer that enables you to manage traffic to your web applications. It provides features such as URL-based routing, SSL termination, and web application firewall capabilities.
+
+Gateway Name: mohitkhosla-test-app-gateway
+Gateway Location: var.location
+Frontend IP: Public
+SKU: Standard_V2
+Virtual Network: mohitkhosla-vnet
+Subnet: app-gateway-subnet
+Public IP Address: mohitkhosla-public-ip
+Frontend Port: 80
+
+2. Backend Pool and Routing
+
+Backend Pool: app-backend-pool
+Backend Settings: http-settings
+Routing Rule: URL-based-routing
+
+The URL-based routing rule enables routing requests to different backends based on the request URL. For example, requests to /api might be routed to one backend pool and requests to /app to another.
+
+3. Health Probes and Monitoring
+
+Health Probe: http-probe
+Log Analytics Workspace: prefix-workspace
+The Application Gateway is configured to send logs and metrics to Log Analytics for monitoring and analysis, helping track traffic patterns, health, and performance.
+
+4. Security Features
+
+Web Application Firewall (WAF): Enabled
+SSL Termination: Enabled
+SSL Termination is configured to decrypt incoming SSL traffic at the Application Gateway. The decrypted traffic is forwarded to the backend pool in plain HTTP.
+
+5. Scaling and Performance
+
+Auto-scaling: Enabled
+Auto-scaling is enabled, which automatically adjusts the number of Application Gateway instances based on traffic load. This ensures that the gateway scales up or down as needed.
+Capacity: 2 instances
+The initial capacity is set to 2 instances, but with auto-scaling enabled, this can grow or shrink based on the incoming traffic volume.
+
+6. Maintenance Window
+Maintenance Window: Sundays, 22:00–23:00
+A maintenance window is set for the Application Gateway, meaning any updates, patches, or configuration changes will occur during this window to minimize impact on traffic.
 
 # Terraform State
 
