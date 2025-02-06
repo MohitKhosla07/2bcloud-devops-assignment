@@ -163,6 +163,11 @@ az aks get-credentials --admin --resource-group <rg-name> --name <aks-cluster-na
    
 5) Install Application gateway Ingress Controller and Provide App gateway DNS Name on Ingress
 
+# Enable Addons
+
+$appgwId = $(az network application-gateway show -n ingress -g mohitkhosla-test-devops-assignment-rg -o tsv --query "id")
+az aks enable-addons -n <your-aks-cluster-name> -g <aks-rg-name> --addons ingress-appgw --appgw-id $appgwId
+
 # Deploy an Application using HELM
 helm upgrade --install app <helm-path> --namespace <namespace> --create-namespace --wait --timeout 5m
 
