@@ -143,7 +143,7 @@ az aks get-credentials --admin --resource-group <rg-name> --name <aks-cluster-na
 # Install helm commands
 1) sudo apt install snapd
    
-2) udo snap install helm --classic
+2) sudo snap install helm --classic
    
 3) helm repo add stable https://charts.helm.sh/stable
 
@@ -153,7 +153,7 @@ az aks get-credentials --admin --resource-group <rg-name> --name <aks-cluster-na
 
 # Change in values.yaml for desired access
 
-1)enable Autoscaling (HPA)
+1) enable Autoscaling (HPA)
 
 2) enable resource and limits
    
