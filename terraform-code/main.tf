@@ -3,7 +3,7 @@ resource "random_id" "prefix" {
 }
 resource "azurerm_resource_group" "main" {
   location = var.location
-  name     = "mohitkhosla-test-devops-assignment-rg"
+  name     = var.resource_group_name
 }
 locals {
   resource_group = {
