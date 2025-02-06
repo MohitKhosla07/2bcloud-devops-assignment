@@ -1,5 +1,3 @@
-Application Deployment Steps using helm Charts
-
 # Deploy a Web Application based on Node JS 
 
 # Prerequisites
@@ -9,12 +7,12 @@ Application Deployment Steps using helm Charts
 # Clone the repository on local
 Git clone https://github.com/MohitKhosla07/2bcloud-devops-assignment.git
 
-make changes locally or add new files or update files
-
-# other commands to push changes on repo
-git add .
-git commit -m "provide a message"
-git push
+# Other commands to push changes on repo
+1) git add .
+   
+3) git commit -m "provide a message"
+   
+5) git push
 --will ask for username and token as password
 
 
