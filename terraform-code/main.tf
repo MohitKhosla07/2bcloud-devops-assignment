@@ -188,10 +188,6 @@ module "aks" {
   }
   enable_auto_scaling    = false
   enable_host_encryption = false
-  # green_field_application_gateway_for_ingress = var.use_brown_field_application_gateway ? null : {
-  #   name        = "ingress"
-  #   subnet_cidr = "10.52.3.0/24"
-  # }
   brown_field_application_gateway_for_ingress = var.use_brown_field_application_gateway ? {
     id        = azurerm_application_gateway.appgw.id
     subnet_id = azurerm_subnet.appgw.id
