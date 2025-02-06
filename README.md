@@ -74,11 +74,11 @@ http:localhost:3000/healthz -- for application health check
 
 # Steps to Push an Image on ACR
 
-# login to azure cloud via SP
+# Login to Azure Cloud via SP
 az login --service-principal  --username <clientid>  --password <client-secret> --tenant <tenant-id>
 az account set --subscription <subscription-id>
 
-# role assignement on ACR -- Prerequisites
+# Role Assignment on ACR -- Prerequisites
 
 # ACR PUSH Access to Push Docker Image
 
@@ -87,7 +87,7 @@ az role assignment create \
     --scope <acr-resource-id> \
     --role AcrPush
 
-# ACR Pull access to pull image from acr on aks
+# ACR Pull access to pull image from acr on AKS
 
 az role assignment create \
     --assignee <client-id> \
@@ -95,15 +95,15 @@ az role assignment create \
     --role AcrPull
 
 
-# Login to container registry
+# Login to Azure Container Registry
 
 az acr login --name <acr-name>
 
-# tag an image
+# Tag an Image
 
 docker tag myapp:latest <acr-name>.azurecr.io/myapp:v1
 
-# push to acr 
+# Push to ACR
 
 docker push <acrname>.azurecr.io/myapp:v1
 
@@ -114,33 +114,56 @@ docker push <acrname>.azurecr.io/myapp:v1
 
 Helm and kubectl must be installed
 
-# use - az aks install-cli --install kubelogin
+# Use- az aks install-cli --install kubelogin
 
 # Note-Service principal or user who are deploying an application must have Kubernetes-cluster-write or kubernetes-cluster-admin access
 
 # Deploy to AKS
+
+# login to AKS Cluster
+1) az account set --subscription 1eecd364-6e97-42a8-b395-428052081474
+   
+2) az aks get-crkubelogin convert-kubeconfig -l azurecliedentials --resource-group mohitkhosla-test-devops-assignment-rg --name mohitkhosla-test-aks-cluster --overwrite-existing
+   
+3) kubelogin convert-kubeconfig -l azurecli
+
+# Check & Run - Kubectl get Pods 
+
+# if this doesn't work run 
 az aks get-credentials --admin --resource-group <rg-name> --name <aks-cluster-name>
-helm upgrade --install app <helm-path> --namespace <namespace> --create-namespace --wait --timeout 5m
+
 
 # Create Helm Charts Locally
 # Install Kubectl locally
-sudo snap install kubectl
-sudo snap install kubectl --classic
+1) sudo snap install kubectl
+   
+2) sudo snap install kubectl --classic
 
 # Install helm commands
-sudo apt install snapd
-sudo snap install helm --classic
-helm repo add stable https://charts.helm.sh/stable
-helm repo update
-helm create helm-chart -- Same Helm charts will be created
+1) sudo apt install snapd
+   
+2) udo snap install helm --classic
+   
+3) helm repo add stable https://charts.helm.sh/stable
 
-# make changes in values.yaml for desired access
+4) helm repo update
+   
+5) helm create helm-chart -- Same Helm charts will be created
 
-enable Autoscaling (HPA)
-enable resource and limits
-provide replicaCount
-enable ingress
-Install Application gateway Ingress Controller and Provide App gateway DNS Name on Ingress
+# Change in values.yaml for desired access
+
+1)enable Autoscaling (HPA)
+
+2) enable resource and limits
+   
+3) provide replicaCount
+   
+4) enable ingress
+   
+5) Install Application gateway Ingress Controller and Provide App gateway DNS Name on Ingress
+
+# Deploy an Application using HELM
+helm upgrade --install app <helm-path> --namespace <namespace> --create-namespace --wait --timeout 5m
 
 # TESTING THE APPLICATION RUN:
  http://myapp-k8s-node.eastus2.cloudapp.azure.com/
