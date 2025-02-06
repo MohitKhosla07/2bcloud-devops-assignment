@@ -1,4 +1,8 @@
 
+variable "resource_group_name" {
+  type    = string
+  default = "mohitkhosla-test-devops-assignment-rg"
+}
 
 variable "key_vault_firewall_bypass_ip_cidr" {
   type    = string
