@@ -109,11 +109,6 @@ terraform destroy
 
 ## Terraform State Management
 Terraform state is stored in an Azure Storage Account Blob container:
-```hcl
-resource_group_name  = "<resource-group-name>"
-storage_account_name = "<storage-account-name>"
-container_name       = "terraform-state"
-key                  = "terraform.tfstate"
 ```
 _**Note:** Ensure that the storage account is manually created in Azure before using it for state management._
 
