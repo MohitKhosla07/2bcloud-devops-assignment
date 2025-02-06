@@ -14,12 +14,12 @@ locals {
 resource "azurerm_virtual_network" "test" {
   address_space       = ["10.52.0.0/16"]
   location            = local.resource_group.location
-  name                = "mohit-aks-vn"
+  name                = "${local.resource_group_name}-vnet"
   resource_group_name = local.resource_group.name
 }
 resource "azurerm_subnet" "test" {
   address_prefixes     = ["10.52.0.0/24"]
-  name                 = "mohit-aks-sn"
+  name                 = "${local.resource_group_name}-aks-snet"
   resource_group_name  = local.resource_group.name
   virtual_network_name = azurerm_virtual_network.test.name
 }
@@ -28,13 +28,13 @@ locals {
 }
 resource "azurerm_subnet" "appgw" {
   address_prefixes     = ["10.52.1.0/24"]
-  name                 = "mohit-aks-gw"
+  name                 = "${local.resource_group_name}-aks-appgw-snet"
   resource_group_name  = local.resource_group.name
   virtual_network_name = azurerm_virtual_network.test.name
 }
 resource "azurerm_user_assigned_identity" "test" {
   location            = local.resource_group.location
-  name                = "2bcloud-test-umi"
+  name                = "${local.resource_group_name}-umi"
   resource_group_name = local.resource_group.name
 }
 # Just for demo purpose, not necessary to named cluster.
