@@ -52,10 +52,10 @@ az role assignment create \
 az acr login --name <acr-name>
 
 # Tag an Image
-docker tag myapp:latest <acr-name>.azurecr.io/myapp:v1
+docker tag myapp:latest acr-name.azurecr.io/repo:version
 
 # Push to ACR
-docker push <acrname>.azurecr.io/myapp:v1
+docker push <acrname>.azurecr.io/repo:version
 
 
 # Deployment via Helm Charts 
@@ -89,7 +89,7 @@ http://helm.sh/docs/intro/install/
 # HELM DEPLOYMENT
 
 # Change in values.yaml for desired access
-1) Image - repository: <acr-name>.azurecr.io/<repo>
+1) Image - repository: acr-name.azurecr.io/repo
 
 2) enable Autoscaling (HPA)
 
