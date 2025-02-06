@@ -1,7 +1,5 @@
 # Deploy a Web Application based on Node JS 
 
-# Prerequisites
-
 # Git commands
 
 # Clone the repository on local
@@ -73,6 +71,8 @@ http:localhost:3000 -- for testing docker file on local
 http:localhost:3000/healthz -- for application health check
 
 # Steps to Push an Image on ACR
+docker push 2bcloudtestacr.azurecr.io/<image-name>:<version>
+
 
 # Login to Azure Cloud via SP
 az login --service-principal  --username <clientid>  --password <client-secret> --tenant <tenant-id>
@@ -129,11 +129,12 @@ Helm and kubectl must be installed
 
 # Check & Run - Kubectl get Pods 
 
-# if this doesn't work run 
+# Run if above command kubectl get pods doesn't work
 az aks get-credentials --admin --resource-group <rg-name> --name <aks-cluster-name>
 
 
 # Create Helm Charts Locally
+
 # Install Kubectl locally
 1) sudo snap install kubectl
    
